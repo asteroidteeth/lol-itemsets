@@ -5,6 +5,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lol-itemsets-gui", "lol-ite
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lol-itemsets-lib", "..\lol-itemsets-lib\lol-itemsets-lib.csproj", "{32E675CE-50E6-4309-9EAA-AAED6A0FD6E0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{6252A972-9104-4D78-9F2A-394929BC90BB}"
+	ProjectSection(SolutionItems) = preProject
+		items.json = items.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
