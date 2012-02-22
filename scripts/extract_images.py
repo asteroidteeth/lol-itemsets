@@ -6,12 +6,14 @@ import re
 from shutil import copy
 
 client_location = 'C:\\Riot Games\\League of Legends'
-data_dir_prefix = 'data\\champs'
+
+json_output_file = '..\\lol-itemsets-lib\\data\\champ-list.json'
+data_dir_prefix = '..\\lol-itemsets-lib\\data\\champs'
 
 name_pattern = re.compile(r'([A-Z][a-z]+)')
 
 try:
-	os.mkdir(data_dir_prefix)
+	os.makedirs(data_dir_prefix)
 except:
 	pass
 
@@ -47,7 +49,7 @@ def copy_champion_images(client_location):
 		champ_name = img.split('_')[0]
 		champs.append({'name':add_space(champ_name),'face':new_path})
 	
-	f_out = open('champ-list.json', 'w')
+	f_out = open(json_output_file, 'w')
 	f_out.write(json.dumps(champs, sort_keys=True, indent=4))
 		
 
