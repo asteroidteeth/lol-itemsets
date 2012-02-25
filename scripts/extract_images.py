@@ -7,8 +7,8 @@ from shutil import copy
 
 client_location = 'C:\\Riot Games\\League of Legends'
 
-json_output_file = '..\\lol-itemsets-lib\\data\\champ-list.json'
-data_dir_prefix = '..\\lol-itemsets-lib\\data\\champs'
+json_output_file = '..\\lol-itemsets-lib\\gamedata\\champ-list.json'
+data_dir_prefix = '..\\lol-itemsets-lib\\gamedata\\champs'
 
 name_pattern = re.compile(r'([A-Z][a-z]+)')
 
