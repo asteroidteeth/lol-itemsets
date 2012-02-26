@@ -7,8 +7,8 @@ from shutil import copy
 
 client_location = 'C:\\Riot Games\\League of Legends'
 
-json_output_file = '..\\lol-itemsets-lib\\gamedata\\champ-list.json'
-data_dir_prefix = '..\\lol-itemsets-lib\\gamedata\\champs'
+json_output_file = '../lol-itemsets/data/champ-list.json'
+data_dir_prefix = '../lol-itemsets/data/champs'
 
 name_pattern = re.compile(r'([A-Z][a-z]+)')
 
@@ -47,7 +47,7 @@ def copy_champion_images(client_location):
 		new_path = os.path.join(data_dir_prefix, img)
 		copy(img_path, new_path)
 		champ_name = img.split('_')[0]
-		champs.append({'name':add_space(champ_name),'face':new_path})
+		champs.append({'name':add_space(champ_name),'face':img})
 	
 	f_out = open(json_output_file, 'w')
 	f_out.write(json.dumps(champs, sort_keys=True, indent=4))

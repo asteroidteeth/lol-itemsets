@@ -4,8 +4,8 @@ import os
 
 from BeautifulSoup import BeautifulSoup
 
-data_dir_prefix = "../lol-itemsets-lib/data/items"
-output_file_name = '../lol-itemsets-lib/data/lol-itemlist.json'
+data_dir_prefix = "../lol-itemsets/data/items"
+output_file_name = '../lol-itemsets/data/lol-itemlist.json'
 
 wikia_uri = 'http://leagueoflegends.wikia.com'
 item_list_uri = '/wiki/Recommended_item_code'

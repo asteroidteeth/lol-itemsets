@@ -4,3 +4,11 @@ lol-itemsets/lol-itemsets.suo
 lol-itemsets/obj/*
 lol-itemsets-lib/obj/*
 lol-itemsets-lib/data/
+lol-itemsets/.classpath
+lol-itemsets/.project
+lol-itemsets/.settings
+lol-itemsets/data
+lol-itemsets/target
+scripts/.project
+scripts/.pydevproject
+tests.VisualState.xml
