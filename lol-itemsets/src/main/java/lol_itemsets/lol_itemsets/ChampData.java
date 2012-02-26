@@ -2,26 +2,29 @@ package lol_itemsets.lol_itemsets;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Map;
+
+import javafx.scene.image.Image;
 
 import javax.imageio.ImageIO;
 
 public class ChampData {
-	private BufferedImage face;
+	private Image face;
 
 	private String name;
 
 	public ChampData(Map<String, String> champMap, File imgDir) throws IOException {
 		setName(champMap.get("name"));
-		setFace(ImageIO.read(new File(imgDir, champMap.get("face"))));
+		setFace(new Image(new FileInputStream(new File(imgDir, champMap.get("face")))));
 	}
 	
-	public BufferedImage getFace() {
+	public Image getFace() {
 		return face;
 	}
 
-	public void setFace(BufferedImage face) {
+	public void setFace(Image face) {
 		this.face = face;
 	}
 

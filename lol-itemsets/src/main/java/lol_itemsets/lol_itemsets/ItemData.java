@@ -2,21 +2,25 @@ package lol_itemsets.lol_itemsets;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Map;
+
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import javax.imageio.ImageIO;
 
 public class ItemData {
 	private Integer code;
-	private BufferedImage image;
+	private Image image;
 	private String link;
 	private String mode;
 	private String name;
 
 	public ItemData(Map<String, String> itemMap, File imgDir) throws IOException {
 		setCode(Integer.parseInt(itemMap.get("code")));
-		setImage(ImageIO.read(new File(imgDir, itemMap.get("image"))));
+		setImage(new Image(new FileInputStream(new File(imgDir, itemMap.get("image")))));
 		setLink(itemMap.get("link"));
 		setMode(itemMap.get("mode"));
 		setName(itemMap.get("name"));
@@ -31,11 +35,11 @@ public class ItemData {
 		this.code = code;
 	}
 
-	public BufferedImage getImage() {
+	public Image getImage() {
 		return image;
 	}
 
-	public void setImage(BufferedImage image) {
+	public void setImage(Image image) {
 		this.image = image;
 	}
 

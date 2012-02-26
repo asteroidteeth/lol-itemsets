@@ -1,30 +1,34 @@
 package lol_itemsets.lol_itemsets;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.effect.BlendMode;
-import javafx.scene.effect.BoxBlur;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.shape.Circle;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class App extends Application {
+
+	public class ItemNameComparator implements Comparator<ItemData> {
+		
+		@Override
+		public int compare(ItemData o1, ItemData o2) {
+			return o1.getName().compareTo(o2.getName());
+		}
+
+	}
 
 	private final Random random = new Random();
 	
@@ -34,56 +38,61 @@ public class App extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-		Group root = new Group();
-		Scene scene = new Scene(root, 800, 600, Color.BLACK);
-		primaryStage.setScene(scene);
-
-		Rectangle colors = new Rectangle(scene.getWidth(), scene.getHeight(),
-				new LinearGradient(0f, 1f, 1f, 0f, true, CycleMethod.NO_CYCLE,
-						new Stop[] { new Stop(0, Color.web("#f8bd55")),
-								new Stop(0.14, Color.web("#c0fe56")),
-								new Stop(0.28, Color.web("#5dfbc1")),
-								new Stop(0.43, Color.web("#64c2f8")),
-								new Stop(0.57, Color.web("#be4af7")),
-								new Stop(0.71, Color.web("#ed5fc2")),
-								new Stop(0.85, Color.web("#ef504c")),
-								new Stop(1, Color.web("#f2660f")), }));
-
-		Group circles = new Group();
-		for (int i = 0; i < 30; i++) {
-			Circle circle = new Circle(150, Color.web("white", 0.05));
-			circle.setStrokeType(StrokeType.OUTSIDE);
-			circle.setStroke(Color.web("white", 0.16));
-			circle.setStrokeWidth(4);
-			circles.getChildren().add(circle);
-
-		}
-		circles.setEffect(new BoxBlur(10, 10, 3));
-
-		Group blendModeGroup = new Group(new Group(new Rectangle(
-				scene.getWidth(), scene.getHeight(), Color.BLACK), circles),
-				colors);
-		colors.setBlendMode(BlendMode.OVERLAY);
-		root.getChildren().add(blendModeGroup);
-
-		Timeline timeline = new Timeline();
-		for (Node circle: circles.getChildren()) {
-		    timeline.getKeyFrames().addAll(
-		        new KeyFrame(Duration.ZERO, // set start position at 0
-		            new KeyValue(circle.translateXProperty(), random() * 800),
-		            new KeyValue(circle.translateYProperty(), random() * 600)
-		        ),
-		        new KeyFrame(new Duration(40000), // set end position at 40s
-		            new KeyValue(circle.translateXProperty(), random() * 800),
-		            new KeyValue(circle.translateYProperty(), random() * 600)
-		        )
-		    );
+		AppConfig config = new AppConfig();
+		ItemList itemlist = null;
+		try {
+			itemlist = new ItemList(config);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.exit(1);
 		}
 		
-		KeyPressedHandler keyPressedHandler = new KeyPressedHandler(timeline);
-		//root.addEventHandler(KeyEvent.KEY_PRESSED, keyPressedHandler );
-//		timeline.
-//		primaryStage.addEven?tHandler(KeyEvent.KEY_PRESSED, keyPressedHandler);
+		Group root = new Group();
+		root.autosize();
+		Scene scene = new Scene(root, 800, 600, Color.BLACK);
+		primaryStage.setScene(scene);
+		primaryStage.setResizable(false);
+		
+		ItemMouseEventHandler itemMouseHandler = new ItemMouseEventHandler(root);
+		
+		List<ItemData> sortedItemList = new ArrayList<ItemData>(itemlist.getItems());
+		Collections.sort(sortedItemList, new ItemNameComparator());
+		
+		List<TaggedImageView> itemImages = new LinkedList<TaggedImageView>();
+		for (ItemData item : sortedItemList) {
+			TaggedImageView iv = new TaggedImageView();
+			iv.setImage(item.getImage());
+			iv.setFitHeight(64);
+			iv.setFitWidth(64);
+			iv.setProperty("itemdata", item);
+			iv.setOnMouseExited(itemMouseHandler);
+			iv.setOnMouseEntered(itemMouseHandler);
+			iv.setOnMouseMoved(itemMouseHandler);
+			iv.setOnMouseDragged(itemMouseHandler);
+			iv.setOnMouseReleased(itemMouseHandler);
+			itemImages.add(iv);
+		}
+		
+		
+
+		
+		TilePane tiles = new TilePane(10,10);
+		tiles.autosize();
+		tiles.setPadding(new Insets(10));
+		tiles.setPrefSize(800, 600);
+		tiles.getChildren().addAll(itemImages);
+
+		ScrollPane scrollPane = new ScrollPane();
+		scrollPane.autosize();
+		scrollPane.setPrefSize(800,600);
+		scrollPane.setContent(tiles);
+
+
+		root.getChildren().add(scrollPane);
+		
+
+
 		primaryStage.show();
 	}
 
