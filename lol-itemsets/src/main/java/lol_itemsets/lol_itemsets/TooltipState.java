@@ -11,4 +11,6 @@ public class TooltipState {
 	static ItemData itemData;
 	
 	static boolean dropped = false;
+
+	static boolean dragging;
 }

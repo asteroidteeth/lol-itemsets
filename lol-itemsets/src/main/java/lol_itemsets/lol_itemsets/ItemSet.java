@@ -8,7 +8,7 @@ public class ItemSet {
 
 	private ItemData[] list;
 	
-	private final String iniTemplate = 
+	private final static String iniTemplate = 
 			"[ItemSet1]\n"+
 			"SetName=Set1\n"+
 			"RecItem1=%0$d\n"+

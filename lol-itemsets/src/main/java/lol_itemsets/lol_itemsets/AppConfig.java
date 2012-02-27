@@ -15,6 +15,10 @@ public class AppConfig {
 		dataDir = (prop != null) ? prop : "./data"; 
 	}
 	
+	public File getDataDir() {
+		return new File(dataDir);
+	}
+	
 	public File getItemList() {
 		return new File(dataDir, itemListFile);
 	}

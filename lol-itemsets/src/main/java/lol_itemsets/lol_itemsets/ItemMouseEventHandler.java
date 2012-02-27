@@ -1,8 +1,12 @@
 package lol_itemsets.lol_itemsets;
 
+import com.sun.javafx.scene.control.skin.ScrollPaneSkin;
+
 import javafx.event.EventHandler;
 import javafx.event.EventType;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -16,11 +20,17 @@ public class ItemMouseEventHandler implements EventHandler<MouseEvent> {
 	private final int tooltipHeight = 40;
 
 	private Group root;
+	private int width;
+	private int height;
+	private TaggedImageView[] slots;
 
+	
 
-
-	public ItemMouseEventHandler(Group root) {
+	public ItemMouseEventHandler(Group root, TaggedImageView[] slots, int width, int height) {
 		this.root = root;
+		this.slots = slots;
+		this.width = width;
+		this.height = height;
 	}
 
 	@Override
@@ -33,7 +43,7 @@ public class ItemMouseEventHandler implements EventHandler<MouseEvent> {
 			dragTooltip(event);
 		} else {
 			if (type.equals(MouseEvent.MOUSE_RELEASED)) {
-				eraseTooltip(event);
+				dropTooltip(event);
 			} else if (type.equals(MouseEvent.MOUSE_ENTERED)) {
 				drawTooltip(event);
 			} else if (type.equals(MouseEvent.MOUSE_EXITED)) {
@@ -56,7 +66,8 @@ public class ItemMouseEventHandler implements EventHandler<MouseEvent> {
 		TooltipState.draggedImage.setImage(imageView.getImage());
 		
 		TooltipState.itemData = data;
-
+		TooltipState.dragging = true;
+		
 		TilePane parent = (TilePane) imageView.getParent();
 
 		Coords coords = calculateCoords(event, parent);
@@ -127,6 +138,10 @@ public class ItemMouseEventHandler implements EventHandler<MouseEvent> {
 		if (coords.x + tooltipWidth > parent.getWidth()) {
 			coords.x -= 15 + tooltipWidth;
 		}
+		if (coords.y + tooltipHeight > height) {
+			System.out.println("TOO LOW");
+			coords.y -= 15 + tooltipHeight;
+		}
 		return coords;
 	}
 
@@ -143,8 +158,25 @@ public class ItemMouseEventHandler implements EventHandler<MouseEvent> {
 		root.getChildren().remove(TooltipState.tooltip);
 		TooltipState.draggedImage = null;
 		TooltipState.tooltip = null;
-		TooltipState.dropped = true;
+		TooltipState.dragging = false;
+		TooltipState.dropped = false;
 
+	}
+	
+	private void dropTooltip(MouseEvent event) {
+		Point2D dropCoords = new Point2D(event.getSceneX(), event.getSceneY());
+		for (TaggedImageView slot : slots) {
+			if (slot.contains(dropCoords)) {
+				slot.setImage(TooltipState.itemData.getImage());
+				slot.setProperty("itemdata", TooltipState.itemData);
+			}
+		}
+		root.getChildren().remove(TooltipState.draggedImage);
+		root.getChildren().remove(TooltipState.tooltip);
+		System.out.println("Dropped " + TooltipState.itemData.getName());
+		TooltipState.draggedImage = null;
+		TooltipState.tooltip = null;
+		TooltipState.dragging = false;
 	}
 
 	private class Coords {
