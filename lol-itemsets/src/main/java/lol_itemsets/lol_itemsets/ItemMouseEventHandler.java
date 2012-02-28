@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,6 +14,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
+import javafx.scene.text.Text;
 
 public class ItemMouseEventHandler implements EventHandler<MouseEvent> {
 
@@ -24,8 +27,6 @@ public class ItemMouseEventHandler implements EventHandler<MouseEvent> {
 	private int height;
 	private TaggedImageView[] slots;
 
-	
-
 	public ItemMouseEventHandler(Group root, TaggedImageView[] slots, int width, int height) {
 		this.root = root;
 		this.slots = slots;
@@ -36,8 +37,7 @@ public class ItemMouseEventHandler implements EventHandler<MouseEvent> {
 	@Override
 	public void handle(MouseEvent event) {
 		@SuppressWarnings("unchecked")
-		EventType<MouseEvent> type = (EventType<MouseEvent>) event
-				.getEventType();
+		EventType<MouseEvent> type = (EventType<MouseEvent>) event.getEventType();
 
 		if (event.isPrimaryButtonDown()) {
 			dragTooltip(event);
@@ -61,27 +61,32 @@ public class ItemMouseEventHandler implements EventHandler<MouseEvent> {
 
 		TaggedImageView imageView = (TaggedImageView) event.getSource();
 		ItemData data = (ItemData) imageView.getProperty("itemdata");
-		
+
 		TooltipState.draggedImage = new ImageView();
 		TooltipState.draggedImage.setImage(imageView.getImage());
-		
+
 		TooltipState.itemData = data;
 		TooltipState.dragging = true;
-		
+
 		TilePane parent = (TilePane) imageView.getParent();
 
 		Coords coords = calculateCoords(event, parent);
 		Coords imgCoords = calculateImageCoords(event, parent);
 		TooltipState.draggedImage.setX(imgCoords.x);
 		TooltipState.draggedImage.setY(imgCoords.y);
-		
 
 		root.getChildren().add(TooltipState.draggedImage);
 		root.getChildren().add(TooltipState.tooltip);
 
-		Rectangle node = (Rectangle) TooltipState.tooltip.getChildren().get(0);
-		node.setX(coords.x);
-		node.setY(coords.y);
+		for (Node tooltipPart : TooltipState.tooltip.getChildren()) {
+			if (tooltipPart instanceof Rectangle) {
+				((Rectangle) tooltipPart).setX(coords.x);
+				((Rectangle) tooltipPart).setY(coords.y);
+			} else if (tooltipPart instanceof Text) {
+				((Text) tooltipPart).setX(coords.x + 5);
+				((Text) tooltipPart).setY(coords.y + 10);
+			}
+		}
 		System.out.println("Moved: " + coords.x + ", " + coords.y);
 	}
 
@@ -95,9 +100,15 @@ public class ItemMouseEventHandler implements EventHandler<MouseEvent> {
 		ItemData data = (ItemData) imageView.getProperty("itemdata");
 		Coords coords = calculateCoords(event, parent);
 
-		Rectangle node = (Rectangle) TooltipState.tooltip.getChildren().get(0);
-		node.setX(coords.x);
-		node.setY(coords.y);
+		for (Node tooltipPart : TooltipState.tooltip.getChildren()) {
+			if (tooltipPart instanceof Rectangle) {
+				((Rectangle) tooltipPart).setX(coords.x);
+				((Rectangle) tooltipPart).setY(coords.y);
+			} else if (tooltipPart instanceof Text) {
+				((Text) tooltipPart).setX(coords.x + 5);
+				((Text) tooltipPart).setY(coords.y + 10);
+			}
+		}
 		root.getChildren().add(TooltipState.tooltip);
 
 		System.out.println("Moved: " + coords.x + ", " + coords.y);
@@ -119,8 +130,8 @@ public class ItemMouseEventHandler implements EventHandler<MouseEvent> {
 		tooltipRect.setFill(Color.YELLOW);
 		tooltipRect.setX(coords.x);
 		tooltipRect.setY(coords.y);
-		// Text label = new Text(x+5,y+10,data.getName());
-		TooltipState.tooltip = new Group(/* label, */tooltipRect);
+		Text label = new Text(coords.x + 5, coords.y + 10, data.getName());
+		TooltipState.tooltip = new Group(/* label, */tooltipRect, label);
 
 		root.getChildren().add(TooltipState.tooltip);
 
@@ -162,7 +173,7 @@ public class ItemMouseEventHandler implements EventHandler<MouseEvent> {
 		TooltipState.dropped = false;
 
 	}
-	
+
 	private void dropTooltip(MouseEvent event) {
 		Point2D dropCoords = new Point2D(event.getSceneX(), event.getSceneY());
 		for (TaggedImageView slot : slots) {

@@ -15,6 +15,8 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.image.Image;
@@ -28,6 +30,15 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class App extends Application {
+
+	public class ChampComparator implements Comparator<ChampData> {
+
+		@Override
+		public int compare(ChampData o1, ChampData o2) {
+			return o1.getName().compareTo(o2.getName());
+		}
+
+	}
 
 	public class ItemNameComparator implements Comparator<ItemData> {
 
@@ -48,8 +59,10 @@ public class App extends Application {
 	public void start(Stage primaryStage) {
 		AppConfig config = new AppConfig();
 		ItemList itemlist = null;
+		ChampList champlist = null;
 		try {
 			itemlist = new ItemList(config);
+			champlist = new ChampList(config);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -61,8 +74,6 @@ public class App extends Application {
 		Scene scene = new Scene(root, 800, 600, Color.WHITE);
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);
-
-
 
 		BorderPane mainPane = new BorderPane();
 		Pane topPane = new Pane();
@@ -91,12 +102,29 @@ public class App extends Application {
 			slotX += 8 + 64;
 			selectedItems[i] = slot;
 		}
+
+		ChoiceBox<ChampData> champChooser = new ChoiceBox<ChampData>();
+		List<ChampData> sortedChamps = new ArrayList<ChampData>(champlist.getChamps());
+		Collections.sort(sortedChamps, new ChampComparator());
+		champChooser.getItems().addAll(sortedChamps);
+		
+		champChooser.setLayoutX(slotX + 8);
+		champChooser.setLayoutY(8);
+		
+		Button buildButton = new Button("Save configuration");
+		buildButton.setLayoutX(slotX + 8);
+
+		
+		
 		topPane.getChildren().addAll(selectedItems);
+		topPane.getChildren().addAll(champChooser, buildButton);
+
+		
 
 		ItemSet itemset = new ItemSet();
 
 		mainPane.setTop(topPane);
-		
+
 		ItemMouseEventHandler itemMouseHandler = new ItemMouseEventHandler(root, selectedItems, 800, 600);
 
 		List<ItemData> sortedItemList = new ArrayList<ItemData>(itemlist.getItems());
@@ -134,6 +162,9 @@ public class App extends Application {
 		root.getChildren().add(mainPane);
 
 		primaryStage.show();
+
+		champChooser.setPrefWidth(buildButton.getWidth());
+		buildButton.setLayoutY(champChooser.getHeight() + 16);
 	}
 
 	private float random() {
