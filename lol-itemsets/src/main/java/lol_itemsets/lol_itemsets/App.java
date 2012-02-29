@@ -118,9 +118,12 @@ public class App extends Application {
 		
 		buildButton.setOnMouseClicked(new BuildButtonHandler(config, selectedItems, champChooser));
 		
+		Button clearConfigButton = new Button("Clear configuration");
+		clearConfigButton.setOnMouseClicked(new ClearConfigHandler(config, champChooser));
+		
 		
 		topPane.getChildren().addAll(selectedItems);
-		topPane.getChildren().addAll(champChooser, buildButton);
+		topPane.getChildren().addAll(champChooser, buildButton, clearConfigButton);
 
 		
 
@@ -168,6 +171,8 @@ public class App extends Application {
 
 		champChooser.setPrefWidth(buildButton.getWidth());
 		buildButton.setLayoutY(champChooser.getHeight() + 16);
+		clearConfigButton.setLayoutX(buildButton.getLayoutX() + buildButton.getWidth() + 8);
+		clearConfigButton.setLayoutY(champChooser.getHeight() + 16);
 	}
 
 	private float random() {
