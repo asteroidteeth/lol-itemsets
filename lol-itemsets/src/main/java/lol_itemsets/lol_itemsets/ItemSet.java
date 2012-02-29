@@ -9,22 +9,22 @@ public class ItemSet {
 	private ItemData[] list;
 	
 	private final static String iniTemplate = 
-			"[ItemSet1]\n"+
-			"SetName=Set1\n"+
-			"RecItem1=%0$d\n"+
-			"RecItem2=%1$d\n"+
-			"RecItem3=%2$d\n"+
-			"RecItem4=%3$d\n"+
-			"RecItem5=%4$d\n"+
-			"RecItem6=%5$d\n"+
-					"\n"+
-			"[ItemSet2]\n"+
-			"SetName=Set2\n"+
-			"RecItem1=%0$d\n"+
-			"RecItem2=%1$d\n"+
-			"RecItem3=%2$d\n"+
-			"RecItem4=%3$d\n"+
-			"RecItem5=%4$d\n"+
+			"[ItemSet1]\r\n"+
+			"SetName=Set1\r\n"+
+			"RecItem1=%0$d\r\n"+
+			"RecItem2=%1$d\r\n"+
+			"RecItem3=%2$d\r\n"+
+			"RecItem4=%3$d\r\n"+
+			"RecItem5=%4$d\r\n"+
+			"RecItem6=%5$d\r\n"+
+					"\r\n"+
+			"[ItemSet2]\r\n"+
+			"SetName=Set2\r\n"+
+			"RecItem1=%0$d\r\n"+
+			"RecItem2=%1$d\r\n"+
+			"RecItem3=%2$d\r\n"+
+			"RecItem4=%3$d\r\n"+
+			"RecItem5=%4$d\r\n"+
 			"RecItem6=%5$d";
 
 	public ItemSet() {
@@ -32,6 +32,13 @@ public class ItemSet {
 		
 	}
 	
+	public ItemSet(ItemData[] itemData) {
+		if (itemData.length != 6) {
+			throw new IllegalArgumentException("An item set contains 6 items, whereas this itemdata array contains " + itemData.length);
+		}
+		this.list = itemData;
+	}
+
 	public ItemData get(int index) {
 		return list[index];
 	}

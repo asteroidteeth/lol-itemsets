@@ -107,13 +107,16 @@ public class App extends Application {
 		List<ChampData> sortedChamps = new ArrayList<ChampData>(champlist.getChamps());
 		Collections.sort(sortedChamps, new ChampComparator());
 		champChooser.getItems().addAll(sortedChamps);
-		
+			
 		champChooser.setLayoutX(slotX + 8);
 		champChooser.setLayoutY(8);
 		
+		
+		
 		Button buildButton = new Button("Save configuration");
 		buildButton.setLayoutX(slotX + 8);
-
+		
+		buildButton.setOnMouseClicked(new BuildButtonHandler(config, selectedItems, champChooser));
 		
 		
 		topPane.getChildren().addAll(selectedItems);

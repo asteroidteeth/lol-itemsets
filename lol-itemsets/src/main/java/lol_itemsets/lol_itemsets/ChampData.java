@@ -40,4 +40,14 @@ public class ChampData {
 	public String toString() {
 		return name;
 	}
+
+	public String getFileName() {
+		String[] returnedParts = name.split(" ");
+		StringBuilder builder = new StringBuilder();
+		for (String part : returnedParts) {
+			builder.append(part);
+		}
+		return builder.toString();
+		
+	}
 }
