@@ -9,6 +9,7 @@ import java.util.Set;
 import junit.framework.Assert;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class ItemsetSerializationTest {
@@ -21,6 +22,7 @@ public class ItemsetSerializationTest {
 		itemList = new ItemList(config);
 	}
 
+	@Ignore
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void ItemSetCreation() {
 		ItemSet itemSet = new ItemSet();
@@ -29,6 +31,7 @@ public class ItemsetSerializationTest {
 		itemSet.get(6);
 	}
 
+	@Ignore
 	@Test
 	public void itemSetCreation2() {
 		ArrayList<ItemData> items = new ArrayList<ItemData>(itemList.getItems());
@@ -39,7 +42,7 @@ public class ItemsetSerializationTest {
 	}
 
 
-	
+	@Ignore
 	@Test
 	public void itemSerializationTest() {
 

@@ -11,21 +11,21 @@ public class ItemSet {
 	private final static String iniTemplate = 
 			"[ItemSet1]\r\n"+
 			"SetName=Set1\r\n"+
-			"RecItem1=%0$d\r\n"+
-			"RecItem2=%1$d\r\n"+
-			"RecItem3=%2$d\r\n"+
-			"RecItem4=%3$d\r\n"+
-			"RecItem5=%4$d\r\n"+
-			"RecItem6=%5$d\r\n"+
+			"RecItem1=%1$d\r\n"+
+			"RecItem2=%2$d\r\n"+
+			"RecItem3=%3$d\r\n"+
+			"RecItem4=%4$d\r\n"+
+			"RecItem5=%5$d\r\n"+
+			"RecItem6=%6$d\r\n"+
 					"\r\n"+
 			"[ItemSet2]\r\n"+
 			"SetName=Set2\r\n"+
-			"RecItem1=%0$d\r\n"+
-			"RecItem2=%1$d\r\n"+
-			"RecItem3=%2$d\r\n"+
-			"RecItem4=%3$d\r\n"+
-			"RecItem5=%4$d\r\n"+
-			"RecItem6=%5$d";
+			"RecItem1=%1$d\r\n"+
+			"RecItem2=%2$d\r\n"+
+			"RecItem3=%3$d\r\n"+
+			"RecItem4=%4$d\r\n"+
+			"RecItem5=%5$d\r\n"+
+			"RecItem6=%6$d";
 
 	public ItemSet() {
 		this.list = new ItemData[6];
